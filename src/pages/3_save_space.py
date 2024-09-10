@@ -46,7 +46,7 @@ st.warning(
         icon="⚠️"
 )
 
-save_space = st.checkbox("Remove tiles")
+save_space = st.button("Remove tiles")
 
 if save_space:
     rm_tree(sub_area_dir)

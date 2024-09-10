@@ -20,3 +20,4 @@ folium
 segmentation_models
 streamlit
 ipython==8.0.0
+fiona==1.9.6
