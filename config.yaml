@@ -1,0 +1,8 @@
+models_dir: ../models
+
+outputs_dir: ../data/outputs
+
+data_dir: ../data
+imagery_dir: ../data/imagery
+camp_tiles_dir: ../data/tiled_images
+footprints_dir: ../data/footprints
