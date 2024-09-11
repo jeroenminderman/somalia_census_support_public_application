@@ -146,16 +146,17 @@ or the other one is to double click the `run_app.bat` in the base repository fol
 ### Step by step guide
 1) Create and name a directory for the area you want to create footprints for in `\data\imagery`
 
-![image](https://github.com/user-attachments/assets/88ab6713-02b8-427d-8685-28bcaeca7296)
+
 
 2) Using GIS software create **camp extents** with polygons for your satellite image around the areas of interest.
   
-![image](https://github.com/user-attachments/assets/9f09b82f-db98-42a6-ae9c-e42fcb547a84)
+
 
 3) Export your **camp extents** as `.geojsons` to `\data\imagery\<area>`, **Using a suitable naming scheme like the one shown below.** The model will create sub-area folders based off of the chosen name. Ensure that the relevant satellite images are also placed in this directory.
-  
-![image](https://github.com/user-attachments/assets/b16178ee-df9b-4479-ae2f-18ad4a0b8448)
 
+```
+\data\imagery\Mogadishu
+```
 
 ### App
 
@@ -177,11 +178,6 @@ Following the success message, go to `\data\footprints` to locate the created fo
 
 **Clean Up** - The tile creation portion of this application may require multiple gigabytes of storage depending on the size of the satellite images and extents given. This page provides an easy way to remove the intermediary files following footprint creation. However you will need to re-run **Create Tiles** for any area files that are deleted.
 
-### Models <WIP> will update before Tim Leaves.
+### Models 
 
-**Somaliland** - this model was trained on imagery from bossaso and hargesia only
-
-**Full** - this model was trained on all imagery - somaliland and all priority areas
-
-**Tents only** - this model was trained on all imagery somaliland and all priority areas 
-but for tents only
+**Somaliland** - Buildings in Tents (recommended): The default model that outputs footprints for both tents and buildings. 
