@@ -118,7 +118,7 @@ def build_arrays(sub_area_dir):
 
 
 def create_polygons(
-    model, filtered_images, filtered_filenames, sub_area_dir, n_classes, crs, sub_folder
+    model, filtered_images, filtered_filenames, sub_area_dir, n_classes, crs, sub_folder, selected_folder
 ):
     # get transformation matrix from original .tiff images
     transforms = extract_transform_from_directory(sub_area_dir)
@@ -151,7 +151,7 @@ def create_polygons(
     all_polygons_gdf.reset_index(inplace=True, drop=True)
     
     footprints_dir.mkdir(exist_ok=True)
-    output_footprints = footprints_dir / f"{sub_folder}_footprints.geojson"
+    output_footprints = footprints_dir / f"{selected_folder}_{sub_folder}_footprints.geojson"
     all_polygons_gdf.to_file(output_footprints, driver="GeoJSON")
 
     with st.spinner("Waiting..."):
@@ -163,7 +163,7 @@ def create_polygons(
     )
 
 
-def pipeline(area_dir, runid):
+def pipeline(area_dir, runid, selected_folder):
     conditions_path = models_dir / f"conditions/{runid}_conditions.txt"
     with open(conditions_path, "r") as file:
         text = file.read()
@@ -203,6 +203,7 @@ def pipeline(area_dir, runid):
             n_classes,
             crs,
             sub_folder,
+            selected_folder
         )
 
     return
@@ -221,7 +222,7 @@ def app():
             )
 
             # if st.button("Load Model"):
-            pipeline(area_dir, selected_model)
+            pipeline(area_dir, selected_model, selected_folder)
 
 
 if __name__ == "__main__":
