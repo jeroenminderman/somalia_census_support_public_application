@@ -1,0 +1,7 @@
+epochs = 250,
+batch_size = 50,
+n_classes = 3,
+stacked_array_num = 959,
+weights = [ 0.35874845  8.01102832 11.40204507],
+loss_function = [<function focal_loss at 0x7f1d88e1df30>, <function dice_loss at 0x7f1d894d5120>],
+loss_weights = [1.0, 1.0], 
