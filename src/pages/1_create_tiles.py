@@ -76,7 +76,7 @@ def get_intersection_area(tif_path, polygon_geom, geojson_crs):
 
         if tif_crs != geojson_crs:
             tif_bounds = (
-                gpd.GeoSeries([tif_bounds], crs=tif_crs).to_crs(geojson_gdf.crs).iloc[0]
+                gpd.GeoSeries([tif_bounds], crs=tif_crs).to_crs(geojson_crs)
             )
         if polygon_geom.is_valid:
             intersection = polygon_geom.intersection(tif_bounds)
