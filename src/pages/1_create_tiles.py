@@ -72,15 +72,21 @@ def match_tif_to_geojson_polygons(tif_files, geojson_files):
 
 def get_intersection_area(tif_path, polygon_geom, geojson_crs):
     with rio.open(tif_path) as src:
+        print(geojson_crs)
         tif_bounds, tif_crs = get_tif_bounding_box(tif_path)
-
+        print(tif_crs)
         if tif_crs != geojson_crs:
             tif_bounds = (
                 gpd.GeoSeries([tif_bounds], crs=tif_crs).to_crs(geojson_crs)
             )
         if polygon_geom.is_valid:
             intersection = polygon_geom.intersection(tif_bounds)
-            return intersection.area
+            if intersection.area.any() > 0:
+                print("got here")
+                return intersection.area
+            else:
+                st.error(f"No overlap between .tif files and polygons. Please check the CRS of your image: {tif_crs} and geojson {geojson_crs} matches")
+                st.stop()
 
 
 def match_tif_to_geojson_polygons_2(tif_files, geojson_files):
@@ -98,12 +104,13 @@ def match_tif_to_geojson_polygons_2(tif_files, geojson_files):
                     intersection_area = get_intersection_area(
                         tif_file, polygon_geom, geojson_crs
                     )
-                    if intersection_area:
+                    if intersection_area.any():
                         if intersection_area and intersection_area > 0:
                             relevant_tifs.append((tif_file, intersection_area))
                         if intersection_area > max_intersection_area:
                             max_intersection_area = intersection_area
                             best_tif = tif_file
+                        
                 matches.append(
                     (geojson_file.name, idx, best_tif, max_intersection_area)
                 )
