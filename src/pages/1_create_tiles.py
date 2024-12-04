@@ -77,16 +77,11 @@ def get_intersection_area(tif_path, polygon_geom, geojson_crs):
         print(tif_crs)
         if tif_crs != geojson_crs:
             tif_bounds = (
-                gpd.GeoSeries([tif_bounds], crs=tif_crs).to_crs(geojson_crs)
+                gpd.GeoSeries([tif_bounds], crs=tif_crs).to_crs(geojson_crs).iloc[0]
             )
         if polygon_geom.is_valid:
             intersection = polygon_geom.intersection(tif_bounds)
-            if intersection.area.any() > 0:
-                print("got here")
-                return intersection.area
-            else:
-                st.error(f"No overlap between .tif files and polygons. Please check the CRS of your image: {tif_crs} and geojson {geojson_crs} matches")
-                st.stop()
+            return intersection.area
 
 
 def match_tif_to_geojson_polygons_2(tif_files, geojson_files):
@@ -104,18 +99,22 @@ def match_tif_to_geojson_polygons_2(tif_files, geojson_files):
                     intersection_area = get_intersection_area(
                         tif_file, polygon_geom, geojson_crs
                     )
-                    if intersection_area.any():
+                    if intersection_area:
                         if intersection_area and intersection_area > 0:
                             relevant_tifs.append((tif_file, intersection_area))
                         if intersection_area > max_intersection_area:
                             max_intersection_area = intersection_area
                             best_tif = tif_file
-                        
-                matches.append(
-                    (geojson_file.name, idx, best_tif, max_intersection_area)
-                )
-
-    return matches
+                
+                if max_intersection_area != 0.0:
+                    matches.append(
+                        (geojson_file.name, idx, best_tif, max_intersection_area)
+                    )              
+    if not matches:
+        st.error(f"No overlapping polygons found between supplied .tif files and geojsons. Please ensure that the projected CRS of your satellite images and GeoJSONs match")
+        st.stop()
+    else:
+        return matches
 
 
 def create_tile_rasters(polygon, satellite_image, polygon_idx, area_name, tile_dir):
